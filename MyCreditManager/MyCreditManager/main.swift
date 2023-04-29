@@ -71,14 +71,14 @@ func operation(_ str: String) -> Bool {
             let subjectScore = getScore(String(score[2].uppercased()))
             if subjectScore > 0 {
                 if (students[person] != nil) {
-                    print("\(person) 학생의 \(subject) 과목이 \(score[2])로 추가 (변경) 되었습니다.")
+                    print("\(person) 학생의 \(subject) 과목이 \(score[2].uppercased())로 추가 (변경) 되었습니다.")
                     if students[person]![subject] == nil {
                         students[person]![subject] = subjectScore
                     } else {
                         students[person] = [subject : subjectScore]
                     }
                 } else {
-                    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+                    print("\(person) 학생을 찾지 못했습니다. 다시 확인해주세요.")
                 }
             } else {
                 print("입력이 잘못되었습니다. 다시 확인해주세요.")
@@ -94,12 +94,13 @@ func operation(_ str: String) -> Bool {
             
             if (students[person] != nil) {
                 if students[person]![subject] != nil {
+                    print("\(person) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
                     students[person]![subject] = nil
                 } else {
-                    print("입력이 잘못되었습니다. 다시 확인해주세요.")
+                    print("\(person) 학생의 과목중 \(subject)를 찾지 못했습니다. 다시 확인해주세요.")
                 }
             } else {
-                print("입력이 잘못되었습니다. 다시 확인해주세요.")
+                print("\(person) 학생을 찾지 못했습니다. 다시 확인해주세요.")
             }
         }
     } else if enteredKey == "5" {
