@@ -1,9 +1,3 @@
-//
-//  main.swift
-//  MyCreditManager
-//
-//  Created by ChoiKwangWoo on 2023/04/28.
-//
 
 import Foundation
 var students: [String: [String: Double]] = [:]
