@@ -25,6 +25,7 @@
 /* Begin PBXFileReference section */
 		CD3877262A029A7200209BD4 /* MyCreditManagerSOLID */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MyCreditManagerSOLID; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD3877292A029A7200209BD4 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		CD86044C2A03E7F8005A1213 /* READ.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = READ.rtf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				CD3877292A029A7200209BD4 /* main.swift */,
+				CD86044C2A03E7F8005A1213 /* READ.rtf */,
 			);
 			path = MyCreditManagerSOLID;
 			sourceTree = "<group>";

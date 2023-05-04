@@ -26,7 +26,10 @@ class CreditManager {
     }
 }
 
-class StudentManager: CreditManager {
+let creditManager = CreditManager()
+creditManager.initializeManager()
+
+class StudentManager {
     var students: [Student]
     let studentHandler: StudentHandler
     
@@ -34,12 +37,17 @@ class StudentManager: CreditManager {
         self.students = students
         self.studentHandler = studentHandler
     }
+    
+    func manageStudent() -> [Student] {
+        studentHandler.startCreditManager()
+        return students
+    }
 }
 
 class StudentHandler: StudentManager {
     
     func startCreditManager() {
-        let currentMode = self.mode
+        let currentMode = creditManager.mode
         if currentMode == "1" {
             print("추가할 학생의 이름을 입력해주세요")
             let addTargetStudent = self.addStudent(readLine()!)
@@ -63,7 +71,7 @@ class StudentHandler: StudentManager {
     func addStudent(_ studentName: String) -> Student? {
         if self.studentExistCheck(studentName) {
             print("\(studentName)은/는 이미 존재하는 학생입니다. 추가하지 않습니다.")
-            self.initializeManager()
+            creditManager.initializeManager()
             return nil
         } else {
             let newStudent = Student(name: studentName, subject: [], score: [])
@@ -85,8 +93,8 @@ class Student {
     }
 }
 
-let creditManager = CreditManager()
-creditManager.initializeManager()
-//let studentManager = StudentManager(students: [], studentHandler: nil)
+//확 다시만들어?
+//let studentManager = StudentManager(students: [])
 //studentManager.studentHandler?.startCreditManager()
 //print(studentManager.students.count)
+
