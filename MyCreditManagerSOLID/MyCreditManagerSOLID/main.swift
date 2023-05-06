@@ -69,7 +69,7 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             let subjectGrade = String(scoreInfoDetail[2]).uppercased()
             let subjectScore = getScoreFromGrade(subjectGrade)
             
-            if subjectScore > 0 {
+            if subjectScore > -1 {
                 if students[student] != nil {
                     print("\(student) 학생의 \(subject) 과목이 \(subjectGrade)로 추가 (변경) 되었습니다.")
                     if students[student]![subject] == nil {
