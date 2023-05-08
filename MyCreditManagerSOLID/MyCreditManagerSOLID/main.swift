@@ -25,12 +25,11 @@ protocol RemoveScore {
 }
 
 protocol CheckScore {
-    func checkScore()
+    func showStudentScoreAverage()
 }
 
 class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, CheckScore {
-    
-    var students: [String: [String: Double]] = [:]
+    private var students: [String: [String: Double]] = [:]
     
     func addStudent() {
         print("추가할 학생의 이름을 입력해주세요")
@@ -41,7 +40,7 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             print("\(studentName) 학생을 추가했습니다.")
             students[studentName] = [:]
         }
-        initializeManager()
+        controlCreditManager()
     }
     
     func removeStudent() {
@@ -53,9 +52,10 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
         } else {
             print("\(studentName) 학생을 찾지 못했습니다.")
         }
-        initializeManager()
+        controlCreditManager()
     }
     
+    // 좀 더 가독성있게 만들 수 있을거 같은데... 일단 보류
     func addOrChangeScore() {
         print("성적을 추가할 학생의 이름, 과목 이름, 성적(A+, A, F 등)을 띄어쓰기로 구분하여 작성해주세요\n입력예) Mickey Swift A+\n만약에 학생의 성적 중 해당 과목이 존재하면 기존 점수가 갱신됩니다.")
         let enteredScoreInfo = readLine()!
@@ -72,8 +72,10 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             if subjectScore > -1 {
                 if students[student] != nil {
                     print("\(student) 학생의 \(subject) 과목이 \(subjectGrade)로 추가 (변경) 되었습니다.")
+                    // students dictionary에 등록된 subject가 없으면 추가
                     if students[student]![subject] == nil {
                         students[student]![subject] = subjectScore
+                    // 있으면 변경
                     } else {
                         students[student] = [subject : subjectScore]
                     }
@@ -84,7 +86,7 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
                 print("등급입력이 잘못되었습니다. 다시 확인해주세요.")
             }
         }
-        initializeManager()
+        controlCreditManager()
     }
     
     func removeScore() {
@@ -110,10 +112,10 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
                 print("\(student) 학생을 찾지 못했습니다. 다시 확인해주세요.")
             }
         }
-        initializeManager()
+        controlCreditManager()
     }
     
-    func checkScore() {
+    func showStudentScoreAverage() {
         print("평점을 알고싶은 학생의 이름을 입력해주세요")
         let studentName = readLine()!
         
@@ -123,10 +125,10 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
         } else {
             print("\(studentName) 학생을 찾지 못했습니다.")
         }
-        initializeManager()
+        controlCreditManager()
     }
     
-    func initializeManager() {
+    func controlCreditManager() {
         print("원하는 기능을 입력해주세요.\n1. 학생추가 2. 학생삭제 3. 성적추가(변경) 4. 성적삭제 5. 평점보기 X. 종료")
         let enteredKey = readLine()!
         if enteredKey == "1" {
@@ -138,12 +140,12 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
         } else if enteredKey == "4" {
             removeScore()
         } else if enteredKey == "5" {
-            checkScore()
+            showStudentScoreAverage()
         } else if enteredKey.lowercased() == "x" {
             return
         } else {
             print("뭔가 입력이 잘못되었습니다. 1~5 사이의 숫자 혹은 X를 입력해주세요.")
-            initializeManager()
+            controlCreditManager()
         }
     }
     
@@ -161,8 +163,12 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
         default: return -1
         }
     }
+    
+    func showStudentsScore() {
+        print(students)
+    }
 }
 
 let creditManager = CreditManager()
-creditManager.initializeManager()
-print(creditManager.students)
+creditManager.controlCreditManager()
+print(creditManager.showStudentsScore())
