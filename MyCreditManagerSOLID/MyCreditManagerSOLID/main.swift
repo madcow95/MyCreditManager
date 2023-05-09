@@ -46,12 +46,13 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
     func removeStudent() {
         print("삭제할 학생의 이름을 입력해주세요")
         let studentName = readLine()!
-        if students[studentName] != nil {
-            print("\(studentName) 학생을 삭제하였습니다.")
-            students[studentName] = nil
-        } else {
+        guard students[studentName] != nil else {
             print("\(studentName) 학생을 찾지 못했습니다.")
+            controlCreditManager()
+            return
         }
+        print("\(studentName) 학생을 삭제하였습니다.")
+        students[studentName] = nil
         controlCreditManager()
     }
     
@@ -72,14 +73,13 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             if subjectScore > -1 {
                 guard students[student] != nil else {
                     print("\(student) 학생을 찾지 못했습니다. 다시 확인해주세요.")
+                    controlCreditManager()
                     return
                 }
                 print("\(student) 학생의 \(subject) 과목이 \(subjectGrade)로 추가 (변경) 되었습니다.")
                 // students dictionary에 등록된 subject가 없으면 추가
-                
                 if students[student]![subject] == nil {
                     students[student]![subject] = subjectScore
-                // 있으면 변경
                 } else {
                     students[student] = [subject : subjectScore]
                 }
@@ -104,12 +104,13 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             
             guard students[student] != nil else {
                 print("\(student) 학생을 찾지 못했습니다. 다시 확인해주세요.")
+                controlCreditManager()
                 return
             }
             
-            if var studentInfo = students[student], studentInfo[subject] != nil {
+            if students[student]![subject] != nil {
                 print("\(student) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
-                studentInfo[subject] = nil
+                students[student]![subject] = nil
             } else {
                 print("\(student) 학생의 과목중 \(subject)를 찾지 못했습니다. 다시 확인해주세요.")
             }
@@ -121,47 +122,56 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
         print("평점을 알고싶은 학생의 이름을 입력해주세요")
         let studentName = readLine()!
         
-        if students[studentName] != nil {
-            let scoreValues = students[studentName]!.values
-            print("평점 : \(Double(scoreValues.reduce(0, +)) / Double(students[studentName]!.count))")
-        } else {
+        guard students[studentName] != nil else {
             print("\(studentName) 학생을 찾지 못했습니다.")
+            controlCreditManager()
+            return
         }
+        
+        let scoreValues = students[studentName]!.values
+        print("평점 : \(Double(scoreValues.reduce(0, +)) / Double(students[studentName]!.count))")
         controlCreditManager()
     }
     
     func controlCreditManager() {
         print("원하는 기능을 입력해주세요.\n1. 학생추가 2. 학생삭제 3. 성적추가(변경) 4. 성적삭제 5. 평점보기 X. 종료")
         let enteredKey = readLine()!
-        if enteredKey == "1" {
-            addStudent()
-        } else if enteredKey == "2" {
-            removeStudent()
-        } else if enteredKey == "3" {
-            addOrChangeScore()
-        } else if enteredKey == "4" {
-            removeScore()
-        } else if enteredKey == "5" {
-            showStudentScoreAverage()
-        } else if enteredKey.lowercased() == "x" {
-            return
-        } else {
+        switch enteredKey.lowercased() {
+        case "1": addStudent()
+        case "2": removeStudent()
+        case "3": addOrChangeScore()
+        case "4": removeScore()
+        case "5": showStudentScoreAverage()
+        case "x": return
+        default :
             print("뭔가 입력이 잘못되었습니다. 1~5 사이의 숫자 혹은 X를 입력해주세요.")
             controlCreditManager()
         }
     }
     
+    enum ScoreEnum: Double {
+        case AA = 4.5
+        case A = 4.0
+        case BB = 3.5
+        case B = 3.0
+        case CC = 2.5
+        case C = 2.0
+        case DD = 1.5
+        case D = 1.0
+        case F = 0.0
+    }
+    
     func getScoreFromGrade(_ grade: String) -> Double {
         switch grade {
-        case "A+": return 4.5
-        case "A": return 4.0
-        case "B+": return 3.5
-        case "B": return 3.0
-        case "C+": return 2.5
-        case "C": return 2.0
-        case "D+": return 1.5
-        case "D": return 1.0
-        case "F": return 0.0
+        case "A+": return ScoreEnum.AA.rawValue
+        case "A": return ScoreEnum.A.rawValue
+        case "B+": return ScoreEnum.BB.rawValue
+        case "B": return ScoreEnum.B.rawValue
+        case "C+": return ScoreEnum.CC.rawValue
+        case "C": return ScoreEnum.C.rawValue
+        case "D+": return ScoreEnum.DD.rawValue
+        case "D": return ScoreEnum.D.rawValue
+        case "F": return ScoreEnum.F.rawValue
         default: return -1
         }
     }
