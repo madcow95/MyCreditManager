@@ -70,17 +70,18 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             let subjectScore = getScoreFromGrade(subjectGrade)
             
             if subjectScore > -1 {
-                if students[student] != nil {
-                    print("\(student) 학생의 \(subject) 과목이 \(subjectGrade)로 추가 (변경) 되었습니다.")
-                    // students dictionary에 등록된 subject가 없으면 추가
-                    if students[student]![subject] == nil {
-                        students[student]![subject] = subjectScore
-                    // 있으면 변경
-                    } else {
-                        students[student] = [subject : subjectScore]
-                    }
-                } else {
+                guard students[student] != nil else {
                     print("\(student) 학생을 찾지 못했습니다. 다시 확인해주세요.")
+                    return
+                }
+                print("\(student) 학생의 \(subject) 과목이 \(subjectGrade)로 추가 (변경) 되었습니다.")
+                // students dictionary에 등록된 subject가 없으면 추가
+                
+                if students[student]![subject] == nil {
+                    students[student]![subject] = subjectScore
+                // 있으면 변경
+                } else {
+                    students[student] = [subject : subjectScore]
                 }
             } else {
                 print("등급입력이 잘못되었습니다. 다시 확인해주세요.")
@@ -101,15 +102,16 @@ class CreditManager: AddStudent, RemoveStudent, AddOrChangeScore, RemoveScore, C
             let student = String(scoreInfoDetail[0]).lowercased()
             let subject = String(scoreInfoDetail[1]).lowercased()
             
-            if (students[student] != nil) {
-                if students[student]![subject] != nil {
-                    print("\(student) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
-                    students[student]![subject] = nil
-                } else {
-                    print("\(student) 학생의 과목중 \(subject)를 찾지 못했습니다. 다시 확인해주세요.")
-                }
-            } else {
+            guard students[student] != nil else {
                 print("\(student) 학생을 찾지 못했습니다. 다시 확인해주세요.")
+                return
+            }
+            
+            if var studentInfo = students[student], studentInfo[subject] != nil {
+                print("\(student) 학생의 \(subject) 과목의 성적이 삭제되었습니다.")
+                studentInfo[subject] = nil
+            } else {
+                print("\(student) 학생의 과목중 \(subject)를 찾지 못했습니다. 다시 확인해주세요.")
             }
         }
         controlCreditManager()
